@@ -43,7 +43,10 @@ def solve(ans, s):
     best_ori = -1
     for i in range(m):
         let, x, y = arr[i]
-        if y - x < 3:
+        if y - x == 2:
+            if best_sum < 1:
+                best_sum = 1
+                best_ori = x
             continue
         curr_sum = 0
         curr_sum += score(y - x)
@@ -59,5 +62,7 @@ def solve(ans, s):
         if curr_sum > best_sum:
             best_sum = curr_sum
             best_ori = (x + y) // 2
+    if best_sum == int(best_sum):
+        best_sum = int(best_sum)
     ans["score"] = best_sum
     ans["origin"] = best_ori
