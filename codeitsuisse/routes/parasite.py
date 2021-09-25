@@ -52,7 +52,7 @@ def solve_p1(ans, ori_grid, ind):
                 grid[nx][ny] = 3
                 q.put((nx, ny))
                 healthy -= 1
-                max_tick = tick[nx][ny]
+                max_tick = max(max_tick, tick[nx][ny])
     p1 = {}
     for i in ind:
         str_arr = i.split(",")
@@ -92,7 +92,7 @@ def solve_p3(ans, ori_grid):
                 grid[nx][ny] = 3
                 q.put((nx, ny))
                 healthy -= 1
-                max_tick = tick[nx][ny]
+                max_tick = max(max_tick, tick[nx][ny])
     if healthy > 0:
         ans["p3"] = -1
     else:
@@ -101,27 +101,37 @@ def solve_p3(ans, ori_grid):
 def solve_p4(ans, ori_grid):
     grid = copy.deepcopy(ori_grid)
     row, col = len(grid), len(grid[0])
+    INF = 1000000
+    pow = [[INF for j in range(col)] for i in range(row)]
     q = PriorityQueue()
     healthy = 0
     for i in range(row):
         for j in range(col):
             if grid[i][j] == 3:
-                q.put((0, i, j))
+                q.put((0, i, j, []))
+                pow[i][j] = 0
             elif grid[i][j] == 1:
                 healthy += 1
     dir = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-    max_pow = 0
+    tot_pow = 0
     while healthy > 0:
-        curr = q.get()
-        p, x, y = curr
+        p, x, y, a = q.get()
         for dx, dy in dir:
             nx, ny = x + dx, y + dy
             if valid(nx, ny, row, col):
                 if grid[nx][ny] == 1:
                     grid[nx][ny] = 3
-                    q.put((p, nx, ny))
+                    pow[nx][ny] = 0
+                    q.put((0, nx, ny, []))
+                    for px, py in a:
+                        grid[px][py] = 3
+                        pow[px][py] = 0
+                        q.put((0, px, py, []))
                     healthy -= 1
-                    max_pow = max(max_pow, p)
-                elif grid[nx][ny] == 0 or grid[nx][ny] == 2:
-                    q.put((p + 1, nx, ny))
-    ans["p4"] = max_pow
+                    tot_pow += p
+                elif (grid[nx][ny] == 0 or grid[nx][ny] == 2) and p + 1 < pow[nx][ny]:
+                    pow[nx][ny] = p + 1
+                    na = copy.deepcopy(a)
+                    na.append((nx, ny))
+                    q.put((pow[nx][ny], nx, ny, na))
+    ans["p4"] = tot_pow
