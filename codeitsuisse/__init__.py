@@ -9,3 +9,4 @@ import codeitsuisse.routes.asteroid
 import codeitsuisse.routes.stonks
 import codeitsuisse.routes.fixedrace
 import codeitsuisse.routes.stocker_hunter
+import codeitsuisse.routes.decode
