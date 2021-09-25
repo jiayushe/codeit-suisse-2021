@@ -17,9 +17,9 @@ def evaluateParasite():
         ind = test_case["interestedIndividuals"]
         ans = {}
         ans["room"] = test_case["room"]
-        solve_p1(ans, copy.deepcopy(grid), ind)
-        solve_p3(ans, copy.deepcopy(grid))
-        solve_p4(ans, copy.deepcopy(grid))
+        solve_p1(ans, grid, ind)
+        solve_p3(ans, grid)
+        solve_p4(ans, grid)
         result.append(ans)
     logging.info("My result :{}".format(result))
     return jsonify(result)
@@ -27,7 +27,8 @@ def evaluateParasite():
 def valid(x, y, row, col):
     return x >= 0 and x < row and y >= 0 and y < col
 
-def solve_p1(ans, grid, ind):
+def solve_p1(ans, ori_grid, ind):
+    grid = copy.deepcopy(ori_grid)
     row, col = len(grid), len(grid[0])
     tick = [[-1 for j in range(col)] for i in range(row)]
     q = Queue(maxsize = 10000)
@@ -56,14 +57,18 @@ def solve_p1(ans, grid, ind):
     for i in ind:
         str_arr = i.split(",")
         x, y = int(str_arr[0]), int(str_arr[1])
-        p1[i] = tick[x][y]
+        if tick[x][y] == 0:
+            p1[i] = -1
+        else:
+            p1[i] = tick[x][y]
     ans["p1"] = p1
     if healthy > 0:
         ans["p2"] = -1
     else:
         ans["p2"] = max_tick
 
-def solve_p3(ans, grid):
+def solve_p3(ans, ori_grid):
+    grid = copy.deepcopy(ori_grid)
     row, col = len(grid), len(grid[0])
     tick = [[-1 for j in range(col)] for i in range(row)]
     q = Queue(maxsize = 10000)
@@ -93,7 +98,8 @@ def solve_p3(ans, grid):
     else:
         ans["p3"] = max_tick
 
-def solve_p4(ans, grid):
+def solve_p4(ans, ori_grid):
+    grid = copy.deepcopy(ori_grid)
     row, col = len(grid), len(grid[0])
     q = PriorityQueue()
     healthy = 0
