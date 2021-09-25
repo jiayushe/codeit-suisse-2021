@@ -19,9 +19,6 @@ def evaluateStonks():
     logging.info("My result :{}".format(result))
     return jsonify(result)
 
-def roi(c, b):
-    return (b - c) / c
-
 def solve(energy, capital, timeline):
     end = 2037
     start = 2037 - energy // 2
@@ -31,6 +28,7 @@ def solve(energy, capital, timeline):
             year = timeline[str(i)]
             for k, v in year.items():
                 stocks.add(k)
+
     best_forwards = {}
     best_backwards = {}
     for s in stocks:
@@ -43,41 +41,20 @@ def solve(energy, capital, timeline):
                     qty = year[s]["qty"]
                     arr.append([price, qty, i])
         n = len(arr)
-        left_min = [[] for i in range(n)]
-        left_min[0] = arr[0]
-        left_max = [[] for i in range(n)]
-        left_max[0] = arr[0]
-        for i in range(1, n):
-            if arr[i][0] < left_min[i - 1][0] and arr[i][1] > 0 and arr[i][0] < capital:
-                left_min[i] = arr[i]
-            else:
-                left_min[i] = left_min[i - 1]
-            if arr[i][0] > left_max[i - 1][0]:
-                left_max[i] = arr[i]
-            else:
-                left_max[i] = left_max[i - 1]
-        right_min = [[] for i in range(n)]
-        right_min[n - 1] = arr[n - 1]
-        right_max = [[] for i in range(n)]
-        right_max[n - 1] = arr[n - 1]
-        for i in range(n - 2, -1, -1):
-            if arr[i][0] < right_min[i + 1][0] and arr[i][1] > 0 and arr[i][0] < capital:
-                right_min[i] = arr[i]
-            else:
-                right_min[i] = right_min[i + 1]
-            if arr[i][0] > right_max[i + 1][0]:
-                right_max[i] = arr[i]
-            else:
-                right_max[i] = right_max[i + 1]
-        best_for = [roi(left_min[0][0], right_max[0][0]), left_min[0], right_max[0]]
-        best_back = [roi(right_min[0][0], left_max[0][0]), right_min[0], left_max[0]]
-        for i in range(1, n):
-            rf = roi(left_min[i][0], right_max[i][0])
-            if rf > best_for[0]:
-                best_for = [rf, left_min[i], right_max[i]]
-            rb = roi(right_min[i][0], left_max[i][0])
-            if rf > best_back[0]:
-                best_back = [rb, right_min[i], left_max[i]]
+        best_for = [-1, -1, -1, -1]
+        best_back = [-1, -1, -1, -1]
+        for i in range(n):
+            for j in range(i, n):
+                if arr[i][0] < arr[j][0]:
+                    qty = min(capital // arr[i][0], arr[i][1])
+                    profit = qty * (arr[j][0] - arr[i][0])
+                    if profit > best_for[0]:
+                        best_for = [profit, qty, arr[i][2], arr[j][2]]
+                elif arr[i][0] > arr[j][0]:
+                    qty = min(capital // arr[j][0], arr[j][1])
+                    profit = qty * (arr[i][0] - arr[j][0])
+                    if profit > best_back[0]:
+                        best_back = [profit, qty, arr[j][2], arr[i][2]]
         best_forwards[s] = best_for
         best_backwards[s] = best_back
 
@@ -99,19 +76,17 @@ def solve(energy, capital, timeline):
     ans = []
     curr_year = 2037
     if best_backward_stock != "":
-        backward_qty = min(capital // best_backward[1][0], best_backward[1][1])
-        ans.append("j-{}-{}".format(curr_year, best_backward[1][2]))
-        ans.append("b-{}-{}".format(best_backward_stock, backward_qty))
-        ans.append("j-{}-{}".format(best_backward[1][2], best_backward[2][2]))
-        ans.append("s-{}-{}".format(best_backward_stock, backward_qty))
-        curr_year = best_backward[2][2]
+        ans.append("j-{}-{}".format(curr_year, best_backward[2]))
+        ans.append("b-{}-{}".format(best_backward_stock, best_backward[1]))
+        ans.append("j-{}-{}".format(best_backward[2], best_backward[3]))
+        ans.append("s-{}-{}".format(best_backward_stock, best_backward[1]))
+        curr_year = best_backward[3]
     if best_forward_stock != "":
-        forward_qty = min(capital // best_forward[1][0], best_forward[1][1])
-        ans.append("j-{}-{}".format(curr_year, best_forward[1][2]))
-        ans.append("b-{}-{}".format(best_forward_stock, forward_qty))
-        ans.append("j-{}-{}".format(best_forward[1][2], best_forward[2][2]))
-        ans.append("s-{}-{}".format(best_forward_stock, forward_qty))
-        curr_year = best_forward[2][2]
+        ans.append("j-{}-{}".format(curr_year, best_forward[2]))
+        ans.append("b-{}-{}".format(best_forward_stock, best_forward[1]))
+        ans.append("j-{}-{}".format(best_forward[2], best_forward[3]))
+        ans.append("s-{}-{}".format(best_forward_stock, best_forward[1]))
+        curr_year = best_forward[3]
     if curr_year != 2037:
         ans.append("j-{}-2037".format(curr_year))
 
