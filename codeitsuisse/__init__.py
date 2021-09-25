@@ -8,3 +8,4 @@ import codeitsuisse.routes.parasite
 import codeitsuisse.routes.asteroid
 import codeitsuisse.routes.stonks
 import codeitsuisse.routes.fixedrace
+import codeitsuisse.routes.stocker_hunter
