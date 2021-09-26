@@ -12,3 +12,5 @@ urllib3==1.26.7
 Werkzeug==2.0.1
 scipy
 numpy
+aiohttp
+git+https://github.com/ebraminio/aiosseclient
