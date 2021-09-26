@@ -1,0 +1,50 @@
+<!doctype html>
+
+<style>
+  h1, footer {
+    text-align: center;
+    padding: 0.5em;
+    background-color: gray;
+    color: white;
+  }
+  ul {
+    border-left: 5px solid gray;
+    background-color: #f1f1f1;
+    line-height: 1.5em;
+    list-style-type: none;
+    padding: 10px 20px;
+  }
+  li a {
+    border-radius: 100px;
+    color: black;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  li a:hover {
+    background-color: #f1dede;
+  }
+</style>
+
+<html>
+  <head>
+    <title>CodeIT Suisse 2021</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  
+  <body>
+    <h1>CodeIT Suisse 2021 Contest Mirror</h1>
+    <ul>
+      {%- for page in pages %}
+        <li><a href="{{ base + page }}">{{ page.split('.')[0].replace('-', ' ').title() }}</a></li>
+      {%- endfor %}
+    </ul>
+  </body>
+
+  <footer>
+    <p>
+      <a href="https://github.com/jiayushe/codeit-suisse-2021">
+        <i class="fa fa-github" style="font-size:36px;color:white"></i>
+      </a>
+    </p>
+  </footer>
+</html>
