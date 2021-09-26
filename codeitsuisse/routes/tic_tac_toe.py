@@ -115,6 +115,7 @@ async def game(id):
     def my_turn():
         depth = len(empty_cells(board))
         if depth == 0 or ends(board):
+            flip_table()
             return False
         if depth == 9:
             x = random.choice([0, 1, 2])
@@ -129,6 +130,7 @@ async def game(id):
     def oppo_turn(pos):
         depth = len(empty_cells(board))
         if depth == 0 or ends(board):
+            flip_table()
             return False
         pos_map = {
             "NW": [0, 0], "N": [0, 1], "NE": [0, 2],
@@ -166,6 +168,7 @@ async def game(id):
                 if not my_turn():
                     return
             else:
+                flip_table()
                 return
         else:
             return
