@@ -26,8 +26,8 @@ def solve(data):
     fx = str(round(log(int(x)), 3))
     logging.info("fx {}".format(fx))
     upper = int(math.pow(10, d))
-    for i in range(1, upper):
+    for i in range(1, upper + 1):
         test = str(i) + "::" + fx
         if sha256(test.encode('utf-8')).hexdigest() == y:
             return i
-    return random.randint(1, upper - 1)
+    return random.randint(1, upper)
