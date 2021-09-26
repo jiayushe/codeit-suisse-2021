@@ -19,11 +19,14 @@ def evaluateCipher():
     logging.info("My result :{}".format(result))
     return jsonify(result)
 
+def f(n):
+    return log(n) + 0.5772156649 + 1 / (2 * n) - 1 / (12 * n * n)
+
 def solve(data):
     d = data["D"]
     x = data["X"]
     y = data["Y"]
-    fx = str(round(log(int(x)), 3))
+    fx = str(round(f(int(x)), 3))
     logging.info("fx {}".format(fx))
     upper = int(math.pow(10, d))
     for i in range(1, upper + 1):
