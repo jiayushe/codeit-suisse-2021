@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>CIS2021 - Fixed Race</title>
+    
+    <style>
+        .centered-content {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body class="centered-wrapper">
+<div class="centered-content">
+    <h1 id="fixed-race">Fixed Race</h1>
+    <p>Every hour, there will be a swimming tournament with N number of participants</p>
+    <p>The speed of the swimmers are fixed and they will swim the same timing every single race.</p>
+    <p>Every minute, there will be a race of <b>10</b> swimmers chosen from all the participants.</p>
+    <p>The faster the swimmer, the higher the chance of them participating in races.</p>
+    <p>You are to deduce the rankings of the swimmers in each race by making use of results from previous attempts in
+        the hour.</p>
+    <p>Score will be awarded for every position guessed correctly.</p>
+    <p></p>
+    <br>
+
+    <p>For a race, the sample input is given below.</p>
+
+    <h2 id="sample-input">Sample Input</h2>
+    <p>Input is a <b>String</b> of swimmers delimited by comma</p>
+    <p style="background-color:rgb(246, 248, 250)">Rudolf Ravelo,Joseph Jarosz,Amos Alward,Britt Bisceglia,Nelson
+        Noss,Shona Stanek,Alysia Alejandro,Cortez Carranco,Caitlin Cully,Justin Jack</p>
+
+    <h2 id="sample-output">Sample Expected Output</h2>
+    <p>Expected output is a <b>String</b> of swimmers delimited by comma from the fastest swimmer to the slowest.</p>
+    <p>If you guess that Joseph Jarosz to be first, Caitlin Cully to be second, Nelson Noss to be third and so on, your
+        output should look something like this.</p>
+    <p style="background-color:rgb(246, 248, 250)">Joseph Jarosz,Caitlin Cully,Nelson Noss,Cortez Carranco,Shona
+        Stanek,Rudolf Ravelo,Alysia Alejandro,Justin Jack,Britt Bisceglia,Amos Alward</p>
+    <p></p>
+    <p>After you have made your guess, we will update your group's dashboard.</p>
+    <p>In this case, you will get 20% of total score if 2 positions are guessed correctly</p>
+    <p style="background-color:rgb(246, 248, 250)">Your guess is Joseph Jarosz, Caitlin Cully, Nelson Noss, Cortez
+        Carranco, Shona Stanek, Rudolf Ravelo, Alysia Alejandro, Justin Jack, Britt Bisceglia, Amos Alward. Winner of
+        this race is Justin Jack. Your score is 100.0</p>
+
+
+    <h2 id="requirements">Requirements</h2>
+    <p>Expose 1 POST endpoint /fixedrace for evaluation</p>
+</div>
+
+
+</body></html>

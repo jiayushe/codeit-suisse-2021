@@ -1,0 +1,114 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><h1 data-line-start="0" data-line-end="1">Time Travelling Stonks Man</h1>
+<p data-line-start="1" data-line-end="2"><img src="./time-travel-stonks-man_files/z0pr145e3h751.jpg" alt="Stonks"></p>
+<h2 data-line-start="3" data-line-end="4">Background</h2>
+<p data-line-start="4" data-line-end="12">It is the year 2037.<br>After making several poor stocks decisions in volatile stocks, you've lost most of your life savings.</p>
+<p data-line-start="4" data-line-end="12">Out of desperation, you recall a family heirloom stashed in a dusty corner of the storeroom that has been untouched for several decades.</p>
+<p data-line-start="4" data-line-end="12">Thinking that you could sell it for some cash, you brush off the dust to discover that its actually a strange never-before-seen contraption. After further investigation you realize that its a time machine capable of travelling into the past.</p>
+<p data-line-start="4" data-line-end="12">Pressing a dust-covered button, the machine lights up and asks you to select a specific year to travel to. From the corner of your eye, you notice that there is a battery icon, indicating the limited amount of energy remaining in the time machine.</p>
+<p data-line-start="4" data-line-end="12">In the heat of the moment, you decide to go back in time to purchase stocks. With the power of google, you know the historical stock prices and aim to make the most amount of money through buying and selling at the most optimal time across the years.<br><br>Scrounging up the rest of your savings, armed with historical stock prices and keeping in mind the remaining energy in the machine, you swear to return back to the year 2037 while earning the highest profits.</p>
+<h2 data-line-start="13" data-line-end="14">Challenge description</h2>
+<p data-line-start="14" data-line-end="15">Travel back in time to maximize the amount of profits from buying and selling stocks in different years before returning back to 2037.</p>
+<h2 data-line-start="16" data-line-end="17">Requirement</h2>
+<ul>
+    <li>Expose a POST endpoint <span style="background-color: #ff99cc;">/stonks</span> on your application</li>
+</ul>
+<h2 data-line-start="16" data-line-end="17">Rules</h2>
+<ul>
+    <li data-line-start="17" data-line-end="18">You must return back to the year 2037</li>
+    <li data-line-start="18" data-line-end="19">Once a stock in a given year is bought, it is permanently gone</li>
+    <li data-line-start="19" data-line-end="22">To travel 1 year, it will cost the time travel machine 1 energy, and this scales linearly
+        <ul>
+            <li data-line-start="20" data-line-end="22">Traveling 10 years will cost 10 energy</li>
+        </ul>
+    </li>
+</ul>
+<h2 data-line-start="22" data-line-end="23">Sample</h2>
+<h3 data-line-start="24" data-line-end="25">Input json (from challenge server)</h3>
+<pre><code data-line-start="26" data-line-end="45">[{
+ "energy":2,
+ "capital":500,
+ "timeline":{
+   "2037":{
+     "Apple":{
+       "price":100,
+       "qty":10
+     }
+   },
+   "2036":{
+     "Apple":{
+       "price":10,
+       "qty":50
+      }
+   }
+ }
+},<br>{<br>&lt;test case 2&gt;<br>},...<br>]<br><br>Array containing json objects, with each json object corresponding to a respective test case</code></pre>
+<h3 data-line-start="46" data-line-end="47">Assumptions</h3>
+<ul>
+    <li data-line-start="47" data-line-end="49">Energy will always be a positive integer greater than 2
+        <ul>
+            <li data-line-start="48" data-line-end="49">1 &lt; Energy</li>
+        </ul>
+    </li>
+    <li data-line-start="49" data-line-end="51">Capital will always be a positive integer greater than 0
+        <ul>
+            <li data-line-start="50" data-line-end="51">0 &lt; capital</li>
+        </ul>
+    </li>
+    <li data-line-start="51" data-line-end="53">Year will always be a positive integer that is less than or equal to 2037
+        <ul>
+            <li data-line-start="52" data-line-end="53">0 &lt; year &lt;= 2037</li>
+        </ul>
+    </li>
+    <li data-line-start="53" data-line-end="55">Price of stock will always be a positive integer greater than 0
+        <ul>
+            <li data-line-start="54" data-line-end="55">0 &lt; price</li>
+        </ul>
+    </li>
+    <li data-line-start="55" data-line-end="57">qty of stock will always be a positive integer greater than or equal to 0
+        <ul>
+            <li data-line-start="56" data-line-end="57">0 &lt;= qty</li>
+        </ul>
+    </li>
+</ul>
+<h3 data-line-start="57" data-line-end="58">Output json (response from your endpoint)</h3>
+<p data-line-start="58" data-line-end="59"><code>[["j-2037-2036","b-Apple-50","j-2036-2037","s-Apple-50"],[&lt;output for test case 2&gt;],...]</code></p>
+<h3 data-line-start="60" data-line-end="61">Format of output</h3>
+<ul>
+    <li data-line-start="61" data-line-end="62">Nested array, with each sub-array corresponding to a specific test case</li>
+    <li data-line-start="61" data-line-end="62">Each sub-array contains a list of actions to execute in sequence</li>
+    <li data-line-start="62" data-line-end="69">Each action is made up of 3 segments
+        <ol>
+            <li data-line-start="63" data-line-end="67">Action Type:<br>i. <strong>j</strong> - Jump<br>ii. <strong>b</strong> - Buy<br>iii. <strong>s</strong> - Sell</li>
+            <li data-line-start="67" data-line-end="68">Year-From&nbsp; |&nbsp; Stock Name</li>
+            <li data-line-start="68" data-line-end="69">Year-To&nbsp; &nbsp; &nbsp; |&nbsp; Quantity of Stock</li>
+        </ol>
+    </li>
+</ul>
+<h3 data-line-start="69" data-line-end="70">Sample calculation of profits</h3>
+<ol>
+    <li data-line-start="70" data-line-end="72">j-2037-2036
+        <ul>
+            <li data-line-start="71" data-line-end="72"><strong>Jump</strong> from year <strong>2037</strong> to year <strong>2036</strong></li>
+        </ul>
+    </li>
+    <li data-line-start="72" data-line-end="74">b-Apple-50
+        <ul>
+            <li data-line-start="73" data-line-end="74"><strong>Buy 50 Apple</strong> stocks at $10 = $500</li>
+        </ul>
+    </li>
+    <li data-line-start="74" data-line-end="76">j-2036-2037
+        <ul>
+            <li data-line-start="75" data-line-end="76"><strong>Jump</strong> from year <strong>2036</strong> to year <strong>2037</strong></li>
+        </ul>
+    </li>
+    <li data-line-start="76" data-line-end="79">s-Apple-50
+        <ul>
+            <li data-line-start="77" data-line-end="79"><strong>Sell 50 Apple</strong> stocks at $100 = $5000</li>
+        </ul>
+    </li>
+</ol>
+<p data-line-start="79" data-line-end="80">Profit: $5000 - $500 = <strong>$4500</strong></p>
+<h2 data-line-start="90" data-line-end="91">Challenge created by Dion &amp; Moses</h2>
+<p>For any questions or queries, feel free to contact us in the time-travelling-stonks-man channel in the CodeIT 2021 discord server.</p>
+<p data-line-start="91" data-line-end="92"><em>For feedback or improvements, you can email us at <a href="mailto:dion.ang@credit-suisse.com">dion.ang@credit-suisse.com</a> and <a href="mailto:moses.yong@credit-suisse.com">moses.yong@credit-suisse.com</a></em></p>
+</body></html>

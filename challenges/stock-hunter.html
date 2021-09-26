@@ -1,0 +1,104 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" href="./stock-hunter_files/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head><body style="padding:1em">
+<h1 style="margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.6em;border-bottom:1pt solid #DDDDDD;">Stock Hunter</h1>
+<p style="margin:1.2em 0;">World has been hit by a pandemic, it is the recession time and market is quite bearish.
+    The new millennials are on the lookout for the good stocks to fill their portfolios.
+    Someone tells them to meet the Oracle to search details of the best undervalued stock.
+
+    Oracle tells them to visit a cave, which is divided into a grid of squares.
+    Each square region occupies exactly one coordinate in X,Y format where X and Y are integers and zero or greater.
+    Cave wall will have clue on - entry point, target point (with best undervalued stock), depth of the Grid, GridKey, Horizontal Stepper, Vertical Stepper.
+
+    Each square region of the cave can have Low, Medium or High costs associated with it to access it.
+
+    In order to reach to the best undervalued stock, millennials need to do below:</p>
+
+<h2 style="margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.5em;border-bottom:1px solid #EEEEEE;">Task Objective</h2>
+<ul style="list-style-type:disc;margin-left:1em;padding-left:0.5em;text-indent:0;">
+    <li>Determine the map of the Grid with the smallest rectangle that includes Entry and Target’s coordinates.
+        Represent the Risk Cost as L, M and S for the squares including the Entry and Target</li>
+    <li>Find the minimum cost to reach the Target from the Entry point</li>
+    <ul style="list-style-type:disc;margin-left:1em;padding-left:0.5em;text-indent:0;">
+        <li>You can only move horizontally or vertically but never diagonally</li>
+        <li>The path of minimum cost can go beyond X and Y coordinates of the target point</li>
+    </ul>
+</ul>
+<p style="margin:1.2em 0;">Oracle explains that there is a method to determine any square region’s risk cost based on its risk level.</p>
+<ul style="list-style-type:disc;margin-left:1em;padding-left:0.5em;text-indent:0;">
+    <li>The risk level of a region can be determined from its risk index.
+        A region’s risk level is = (risk index plus the cave system’s depth)% GridKey.</li>
+    <li>The risk index can be determined using the first rule that applies from the list below:
+        The region at 0,0 (the entry of the cave) has a risk index of 0.
+        The region at the coordinates of the target has a risk index of 0.
+        If the region’s Y coordinate is 0, the risk index is its X coordinate times HorizontalStepper.
+        If the region’s X coordinate is 0, the risk index is its Y coordinate times VerticalStepper.
+        Otherwise, the region’s risk index is the result of multiplying the risk levels of the regions at X-1,Y and X,Y-1.</li>
+    <li>
+        Risk cost can be calculated based on the risk level
+        <ul style="list-style-type:disc;margin-left:1em;padding-left:0.5em;text-indent:0;">
+            <li>If the risk level % 3 is 0, the region’s risk cost is 3, denoted by L</li>
+            <li>If the risk level % 3 is 1, the region’s risk cost is 2, denoted by M</li>
+            <li>If the risk level % 3 is 2, the region’s risk cost is 1, denoted by S</li>
+        </ul>
+    </li>
+</ul>
+<p> We will do a POST request on your team URL with the endpoint /stock-hunter to evaluate the solution.
+    Input is an array of testcases. Output should be an array of the results of testcases in the same order as the input testcases</p>
+<h2 style="margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.5em;border-bottom:1px solid #EEEEEE;">Sample Input</h2>
+
+<pre style="font-family:Consolas,Inconsolata,Courier,monospace;font-size:1em;line-height:1.3em;margin:1.2em 0;">    <code style="background-color:#f8f8f8;border-radius:3px;border:1px solid #ccc;display:block;font-family:Consolas,Inconsolata,Courier,monospace;font-size:0.9em;margin:0 0.15em;overflow:auto;padding:0.5em 0.7em;white-space:pre;color:#444;">
+[{
+    "entryPoint":{
+        "first": 0,
+        "second": 0
+        },
+    "targetPoint":{
+        "first": 2,
+        "second": 2
+        },
+    "gridDepth": 156,
+    "gridKey":20183,
+    "horizontalStepper":16807,
+    "verticalStepper":48271
+}]
+    </code>
+</pre>
+
+<h2 style="margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.5em;border-bottom:1px solid #EEEEEE;">Sample Output</h2>
+<pre style="font-family:Consolas,Inconsolata,Courier,monospace;font-size:1em;line-height:1.3em;margin:1.2em 0;">    <code style="background-color:#f8f8f8;border-radius:3px;border:1px solid #ccc;display:block;font-family:Consolas,Inconsolata,Courier,monospace;font-size:0.9em;margin:0 0.15em;overflow:auto;padding:0.5em 0.7em;white-space:pre;color:#444;">
+[{
+    "gridMap":	[
+        [<b>"L"</b>, <b>"M"</b>, "L"],
+        ["L", <b>"L"</b>, "L"],
+        ["L", <b>"S"</b>, <b>"L"</b>]],
+    "minimumCost": 9
+}]
+    </code>
+</pre>
+<h2 style="margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.6em;border-bottom:1pt solid #DDDDDD;">Explanation for sample output</h2>
+<h2 style="margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1em;border-bottom:1pt solid #DDDDDD;">Grid generation</h2>
+<img src="./stock-hunter_files/Grid Explanation.png" width="400" height="250">
+<p> Following is the explanation for the grid map values for some of the grid points
+    </p><ul style="list-style-type:disc;margin-left:1em;padding-left:0.5em;text-indent:0;">
+        <li>(0,0) --&gt; riskIndex = 0, riskLevel = (0 + 156) % 20183 = 156, (riskLevel % 3) = 0, riskCost = 3 <b>riskCategory = L</b></li>
+        <li>(0,1) --&gt; riskIndex = 1*verticalStepper = 48271, riskLevel = (48271 + 156) % 20183 = 8061, riskLevel % 3 = 0, riskCost = 3 <b>riskCategory = L</b></li>
+        <li>(1,0) --&gt; riskIndex = 1*horizontalStepper = 16807, riskLevel = (16807 + 156) % 20183 = 16963, riskLevel % 3 = (16963 % 3) = 1, riskCost = 2  <b>riskCategory = M</b></li>
+        <li>(1,1) --&gt; riskIndex = (riskLevel of (0,1)) * (riskLevel of (1,0)) = 136738743, riskLevel = (136738743 + 156) % 20183 = 19257, riskLevel % 3 = (19257 % 3) = 0, riskCost = 3  <b>riskCategory = L</b></li>
+        <li>(2,2) --&gt; riskIndex = 0, riskLevel = (0 + 156) % 20183 = 156, riskLevel % 3 = 0, riskCost = 3  <b>riskCategory = L</b></li>
+    </ul>
+<p></p>
+<h2 style="margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1em;border-bottom:1pt solid #DDDDDD;">Minimum Cost</h2>
+<p>Minimum cost path is denoted in bold in the sample output. Minimum cost = riskCost(M) + riskCost(L) + riskCost(S) + riskCost(L) = 2 + 3 + 1 + 3 = 9. Any other path would give total riskCost &gt;= 9</p>
+
+<h2 style="margin:1.3em 0 1em;padding:0;font-weight:bold;font-size:1.6em;border-bottom:1pt solid #DDDDDD;">Scoring</h2>
+<p style="margin:1.2em 0;">
+</p><ul style="list-style-type:disc;margin-left:1em;padding-left:0.5em;text-indent:0;">
+    <li>Answering only "GridMap" correctly gives 20 marks</li>
+    <li>Answering only "MinimumCost" gives 80 marks</li>
+    <li>Answering both "GridMap" and "MinimumCost" gives 100 marks</li>
+    <li>Total score is calculated by adding all marks from individual test cases divided by total number of test cases</li>
+</ul>
+<p></p>
+</body></html>

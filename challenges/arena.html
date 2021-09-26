@@ -1,0 +1,174 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./arena_files/github-markdown.css"><style>
+    .markdown-body {
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 45px;
+    }
+
+    @media (max-width: 767px) {
+    .markdown-body {
+    padding: 15px;
+    }
+    }
+</style></head>
+    
+    <body>
+    <div class="markdown-body">
+    <h1 id="arena">Arena</h1>
+<blockquote>
+<p>Author: Dipsy (<a href="https://github.com/dipsywong98">dipsywong98</a>)</p>
+</blockquote>
+<h2 id="story">Story</h2>
+<p>Inspired by a real-life story... Social distancing keeps you away from your friends so you can't play board games with them physically anymore. But in actuality, your friends don't want to play board games with you regardless as they'd rather play Ring Fit with themselves. Don't be sad, you can still play board games with Arena.</p>
+<h2 id="challenge-description">Challenge description</h2>
+<p>The Arena challenge consists of two levels, level 1 <a href="https://en.wikipedia.org/wiki/Tic-tac-toe">Tic-Tac-Toe</a> and level
+2 <a href="https://en.wikipedia.org/wiki/Quoridor">Quoridor</a>. The Tic-Tac-Toe level is more about familiarizing with the networking protocol. Quoridor is really where the real battle happens.</p>
+<h2 id="tic-tac-toe">Tic-Tac-Toe</h2>
+<h3 id="goal">Goal</h3>
+<p>Win the baseline AI, at least draw with the advanced AI, and flip the table when necessary within the time limit. For each Tic-Tac-Toe game, you will start with 18s in your timer to think. Every time you respond you will gain an additional 2s to think.</p>
+<h3 id="rules">Rules</h3>
+<p>The good old Tic-Tac-Toe rules. There are two players, <code>O</code> and <code>X</code>. <code>O</code> goes first, and they each take turns placing one of their symbols in an empty
+box in the 3x3 grid. The first to get three in a row/column/diagonal wins. Otherwise, when the grid is full, it's a draw.</p>
+<h3 id="notation">Notation</h3>
+<p>Use this compass notation when requesting and handling responses with the Arena Tic-Tac-Toe agent.</p>
+<pre><code>|NW|N |NE|
++--+--+--+
+|W |C |E |
++--+--+--+
+|SW|S |SE|
+</code></pre>
+<h3 id="how-to-play">How to play</h3>
+<ol>
+<li><p>Request for a Tic-Tac-Toe evaluation at the coordinator.</p>
+</li>
+<li><p>The coordinator will ask Arena to play Tic-Tac-Toe with you. The Arena will <code>POST</code> to your <code>/tic-tac-toe</code> endpoint with <code>battleId</code> in
+the body.</p>
+<pre><code class="language-json">{
+  "battleId": "21083c13-f0c2-4b54-8cb1-090129ffaa93"
+}
+</code></pre>
+</li>
+<li><p>Your system initiates a <code>GET</code> request at <code>https://cis2021-arena.herokuapp.com/tic-tac-toe/start/{battleId}</code>, which is
+an <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"><code>event/stream</code></a>
+of which the Arena server can keep pushing the latest updates (as events) of the battle to you. The possible events are defined in the next section.</p>
+</li>
+<li><p>When it is your turn, you will need to submit your move within your thinking time. To submit a move, <code>POST</code>
+to <code>https://cis2021-arena.herokuapp.com/tic-tac-toe/play/{battleId}</code> with the payload</p>
+<pre><code class="language-json">{
+  "action": "putSymbol",
+  "position": "SE"
+}
+</code></pre>
+<p>where the position is written in compass notation.</p>
+</li>
+<li><p>Invalid moves are considered surrendering and the opponent should flip the table. To flip the table, <code>POST</code>
+to <code>https://cis2021-arena.herokuapp.com/tic-tac-toe/play/{battleId}</code> with the payload</p>
+<pre><code class="language-json">{
+  "action": "(╯°□°)╯︵ ┻━┻"
+}
+</code></pre>
+</li>
+</ol>
+<h3 id="events">Events</h3>
+<p>The initial event tells you what symbol you are.</p>
+<pre><code>data: {"youAre":"O","id":"15f6301f-cbdd-4084-a810-df2e9c83238f"}
+</code></pre>
+<p>The move event tells you who has made what move.</p>
+<pre><code>data: {"player":"O","action":"putSymbol","position":"NW"}
+</code></pre>
+<p>The game end event tells you the game result.</p>
+<pre><code>data: {"winner":"draw"}
+data: {"winner":"O"}
+</code></pre>
+<p>The flip table event tells who has flipped the table.</p>
+<pre><code>data: {"player":"O","action":"(╯°□°)╯︵ ┻━┻"}
+</code></pre>
+<h2 id="quoridor">Quoridor</h2>
+<h3 id="goal-1">Goal</h3>
+<p>Win the baseline AI, survive long enough when battling with the advanced AI, and flip the table when necessary within the time limit.
+For each Quoridor game, you will start with 60s in your timer to think. Every time you respond you will gain an additional 2s to think.</p>
+<h3 id="rules-1">Rules</h3>
+<p>(Copy-pasted from wiki)</p>
+<p>Quoridor is played on a game board of 81 square spaces (9x9). Each player is represented by a pawn which begins at the center space of one edge of the board (in a two-player game, the pawns begin opposite each other). The objective is to be the first player to move their pawn to any space on the opposite side of the game board from which it begins.</p>
+<p>The distinguishing characteristic of Quoridor is its twenty walls. Walls are flat two-space-wide pieces which can be placed in the groove that runs between the spaces. Walls block the path of all pawns, which must go around them. The walls are divided equally among the players at the start of the game, and once placed, cannot be moved or removed. On a turn, a player may either move their pawn or, if possible, place a wall.</p>
+<p>Legal pawn moves according to the location of the opponent and the walls.
+Pawns can be moved to any space at a right angle (but not diagonally). If adjacent to another pawn, the pawn may jump over that pawn. If an adjacent pawn has a third pawn or a wall on the other side of it, the player may move to either space that is immediately adjacent (left or right) to the first pawn. Multiple pawns may not be jumped. Walls may not be jumped, including when moving laterally due to a pawn or wall being behind a jumped pawn.</p>
+<p>Walls can be placed directly between two spaces, in any groove not already occupied by a wall. However, a wall may not be placed which cuts off the only remaining path of any pawn to the side of the board it must reach.</p>
+<h3 id="notation-1">Notation</h3>
+<p>We use the <a href="https://quoridorstrats.wordpress.com/notation/">standard Quoridor notation</a> for the Arena Quoridor game.</p>
+<p><img src="./arena_files/quoridor-view.png" alt="">
+<img src="./arena_files/quoridor.png" alt=""></p>
+<h3 id="few-things-to-note">Few things to note</h3>
+<ul>
+<li>You may be the <code>first</code> or <code>second</code> player.</li>
+<li>The first player starts at <code>e1</code> and the second at <code>e9</code>.</li>
+<li>The first player wins if they reach row <code>9</code> and the second wins if they reach row <code>1</code>.</li>
+<li>Each player has 10 walls.</li>
+</ul>
+<h3 id="how-to-play-1">How to play</h3>
+<ol>
+<li><p>Request for a Quoridor evaluation at the coordinator.</p>
+</li>
+<li><p>The coordinator will ask Arena to play Quoridor with you. The Arena will <code>POST</code> to your <code>/quoridor</code> endpoint with <code>battleId</code> in
+the body.</p>
+<pre><code class="language-json">{
+  "battleId": "21083c13-f0c2-4b54-8cb1-090129ffaa93"
+}
+</code></pre>
+</li>
+<li><p>Your system initiates a <code>GET</code> request at <code>https://cis2021-arena.herokuapp.com/quoridor/start/{battleId}</code>, which is
+an <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"><code>event/stream</code></a>
+of which the Arena server can keep pushing the latest updates (as events) of the battle to you. The possible events are defined in the next section.</p>
+</li>
+<li><p>When it is your turn, you will need to submit your move within the time limit. To submit a move, <code>POST</code>
+to <code>https://cis2021-arena.herokuapp.com/quoridor/play/{battleId}</code>.</p>
+<p>To move your pawn:</p>
+<pre><code class="language-json">{
+  "action": "move",
+  "position": "e8"
+}
+</code></pre>
+<p>where the <code>position</code> is written in chess notation.</p>
+<p>To place a wall:</p>
+<pre><code class="language-json">{
+  "action": "putWall",
+  "position": "a8h"
+}
+</code></pre>
+<p>where the <code>position</code> is written in the 3-character standard Quoridor notation.</p>
+</li>
+<li><p>Invalid moves are considered surrendering, and the opponent should flip the table. To flip the table, <code>POST</code>
+to <code>https://cis2021-arena.herokuapp.com/quoridor/play/{battleId}</code> with the payload</p>
+<pre><code class="language-json">{
+  "action": "(╯°□°)╯︵ ┻━┻"
+}
+</code></pre>
+</li>
+</ol>
+<h3 id="events-1">Events</h3>
+<p>The initial event tells your which player you are.</p>
+<pre><code>data: {"youAre":"second","id":"15f6301f-cbdd-4084-a810-df2e9c83238f"}
+</code></pre>
+<pre><code>data: {"youAre":"first","id":"15f6301f-cbdd-4084-a810-df2e9c83238f"}
+</code></pre>
+<p>The move event tells you who has made what move.</p>
+<pre><code>data: {"player":"second","position":"e8","action": "move"}
+</code></pre>
+<pre><code>data: {"player":"first","position":"e6v","action": "putWall"}
+</code></pre>
+<p>The game end event tells you the game result.</p>
+<pre><code>data: {"winner":"first"}
+data: {"winner":"second"}
+</code></pre>
+<p>The flip table event tells who has flipped the table.</p>
+<pre><code>data: {"player":"first","action":"(╯°□°)╯︵ ┻━┻"}
+</code></pre>
+
+</div>
+
+    
+    </body></html>
