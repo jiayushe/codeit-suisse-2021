@@ -10,7 +10,7 @@ MarkupSafe==2.0.1
 requests==2.26.0
 urllib3==1.26.7
 Werkzeug==2.0.1
-scipy
-numpy
-aiohttp
+scipy==1.7.1
+numpy==1.21.1
+aiohttp==3.7.4
 git+https://github.com/ebraminio/aiosseclient
